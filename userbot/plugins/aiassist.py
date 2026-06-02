@@ -25,7 +25,9 @@
 #   Ollama    -> AI_BASE_URL=http://localhost:11434/v1        AI_MODEL=llama3.1  (AI_API_KEY=ollama)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+import html
 import os
+import re
 
 import aiohttp
 from telethon.errors import FloodWaitError
@@ -214,3 +216,67 @@ async def rewrite_handler(event):
     prompt = f"Instruction: {instruction}\n\nText:\n{source}"
     result = await _call_ai(prompt, system=system)
     await _send_long(cat, result)
+
+
+async def _fetch_url_text(url, limit_chars=12000):
+    """Fetch a web page and return roughly-plain text (dependency-free HTML strip)."""
+    headers = {"User-Agent": "Mozilla/5.0 (compatible; catuserbot/1.0)"}
+    timeout = aiohttp.ClientTimeout(total=45)
+    try:
+        async with aiohttp.ClientSession(timeout=timeout, headers=headers) as session:
+            async with session.get(url) as resp:
+                if resp.status != 200:
+                    return None, f"❌ Couldn't fetch the page (HTTP {resp.status})."
+                raw = await resp.text(errors="ignore")
+    except aiohttp.ClientError as e:
+        return None, f"❌ Network error: `{e}`"
+    except Exception as e:  # noqa: BLE001
+        return None, f"❌ Could not read that URL: `{e}`"
+
+    # Drop scripts/styles, strip tags, collapse whitespace, unescape entities.
+    raw = re.sub(r"(?is)<(script|style|noscript|head).*?>.*?</\1>", " ", raw)
+    text = re.sub(r"(?s)<[^>]+>", " ", raw)
+    text = html.unescape(text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        return None, "❌ No readable text found on that page."
+    return text[:limit_chars], None
+
+
+@catub.cat_cmd(
+    pattern=r"tldr(?:\s|$)([\s\S]*)",
+    command=("tldr", plugin_category),
+    info={
+        "header": "Fetch a web page/article and return an AI summary.",
+        "description": "Pass a URL (or reply to a message containing one) and get a concise "
+        "AI summary of the page. Handy for long articles, docs, and blog posts.",
+        "usage": [
+            "{tr}tldr <url>",
+            "{tr}tldr  (as a reply to a message with a link)",
+        ],
+    },
+)
+async def tldr_handler(event):
+    arg = (event.pattern_match.group(1) or "").strip()
+    if not arg and event.reply_to_msg_id:
+        replied = await event.get_reply_message()
+        arg = (replied.text or "").strip()
+
+    match = re.search(r"https?://\S+", arg)
+    if not match:
+        return await edit_delete(event, "`Give me a URL, or reply to a message with one.`", 8)
+    url = match.group(0)
+
+    cat = await edit_or_reply(event, "🌐 `Fetching the page...`")
+    text, err = await _fetch_url_text(url)
+    if err:
+        return await edit_delete(cat, err, 10)
+
+    await edit_or_reply(cat, "🧠 `Summarizing...`")
+    system = (
+        "Summarize the following web page content for a reader who hasn't seen it. "
+        "Give a 2-3 sentence overview, then the key points as short bullets. "
+        "Only use what's in the text; don't invent anything."
+    )
+    summary = await _call_ai(text, system=system)
+    await _send_long(cat, f"📰 **TL;DR — {url}**\n\n{summary}")
