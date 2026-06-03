@@ -214,7 +214,7 @@ async def upstream(event):
     changelog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
     # Special case for deploy
     if changelog == "" and not force_update:
-        await event.edit(f"\n`CATUSERBOT is`  **up-to-date**  `with`  **{UPSTREAM_REPO_BRANCH}**\n")
+        await event.edit(f"\n`ANANTUSERBOT is`  **up-to-date**  `with`  **{UPSTREAM_REPO_BRANCH}**\n")
         return repo.__del__()
     if conf == "" and not force_update:
         await print_changelogs(event, ac_br, changelog)

@@ -69,7 +69,7 @@ async def startupmessage():
             Config.CATUBLOGO = await catub.tgbot.send_file(
                 BOTLOG_CHATID,
                 "https://graph.org/file/4e3ba8e8f7e535d5a2abe.jpg",
-                caption="**Your CatUserbot has been started successfully.**",
+                caption="**Your AnantUserbot has been started successfully.**",
                 buttons=[(Button.url("Support", "https://t.me/thecatub"),)],
             )
     except Exception as e:
@@ -197,7 +197,7 @@ async def verifyLoggerGroup():
         await check_send_message_permission(BOTLOG_CHATID, "PRIVATE_GROUP_BOT_API_ID")
     else:
         descript = "Don't delete this group or change to group(If you change group all your previous snips, welcome will be lost.)"
-        _, groupid = await create_supergroup("CatUserbot BotLog Group", catub, Config.TG_BOT_USERNAME, descript)
+        _, groupid = await create_supergroup("AnantUserbot BotLog Group", catub, Config.TG_BOT_USERNAME, descript)
         addgvar("PRIVATE_GROUP_BOT_API_ID", groupid)
         LOGS.info("Private Group for PRIVATE_GROUP_BOT_API_ID is created successfully and added to vars.")
         flag = True

@@ -20,7 +20,7 @@ plugin_category = "utils"
             "{tr}tl <language code> ; <text>",
             "{tr}tl <language codes>",
         ],
-        "examples": "{tr}tl te ; Catuserbot is one of the popular bot",
+        "examples": "{tr}tl te ; Anantuserbot is one of the popular bot",
     },
 )
 async def _(event):

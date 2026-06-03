@@ -139,7 +139,7 @@ async def honk(event):
     info={
         "header": "Make a cool tweet of your account",
         "usage": "{tr}twt <text/reply to msg>",
-        "examples": "{tr}twt Catuserbot",
+        "examples": "{tr}twt Anantuserbot",
     },
 )
 async def twt(event):

@@ -193,7 +193,7 @@ async def uninstall(event):
     },
 )
 async def app_log(event):
-    "To get log of the Catuserbot"
+    "To get log of the Anantuserbot"
     flag = event.pattern_match.group(1)
     flag = [*flag]
     if flag and (flag[0] != "-" or any(i not in ["-", "f", "r", "t"] for i in flag)):

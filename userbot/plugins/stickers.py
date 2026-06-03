@@ -683,7 +683,7 @@ async def pussycat(event):
             "{tr}gridpack -e👌 <packname>",
         ],
         "examples": [
-            "{tr}gridpack -e👌 CatUserbot",
+            "{tr}gridpack -e👌 AnantUserbot",
         ],
     },
 )
@@ -709,7 +709,7 @@ async def pic2packcmd(event):
     except Exception:
         emoji = "▫️"
     chat = "@Stickers"
-    name = "CatUserbot_" + "".join(random.choice(list(string.ascii_lowercase + string.ascii_uppercase)) for _ in range(16))
+    name = "AnantUserbot_" + "".join(random.choice(list(string.ascii_lowercase + string.ascii_uppercase)) for _ in range(16))
     image = await Convert.to_image(catevent, reply, dirct="./temp", file="stickers.png", noedits=True)
     if image[1] is None:
         return await edit_delete(image[0], "__Unable to extract image from the replied message.__")

@@ -114,7 +114,7 @@ async def help_article(event):
     return await build_article(
         event,
         title="Help Menu",
-        description="Help menu for CatUserbot.",
+        description="Help menu for AnantUserbot.",
         thumbnail=get_thumb("help.png"),
         text=help_info[0],
         buttons=help_info[1],
@@ -219,8 +219,8 @@ async def vcplayer_article(event):
 
 async def article_builder(event, method):
     media = thumb = None
-    title = "Cat Userbot"
-    description = "Button menu for CatUserbot"
+    title = "Anant Userbot"
+    description = "Button menu for AnantUserbot"
     if method == "ialive":
         buttons = [
             (
@@ -236,7 +236,7 @@ async def article_builder(event, method):
             return None
         title = "Cat Alive"
         thumb = get_thumb("alive.png")
-        description = "Alive menu for CatUserbot."
+        description = "Alive menu for AnantUserbot."
         ALIVE_PIC = gvarstatus("ALIVE_PIC")
         IALIVE_PIC = gvarstatus("IALIVE_PIC")
         if IALIVE_PIC:

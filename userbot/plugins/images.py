@@ -12,7 +12,7 @@ from ..helpers.google_image_download import google_crawl_images, search_and_down
 from ..helpers.utils import reply_id
 from . import BOTLOG_CHATID
 
-LOGS = logging.getLogger("CatUserbot")
+LOGS = logging.getLogger("AnantUserbot")
 plugin_category = "misc"
 
 

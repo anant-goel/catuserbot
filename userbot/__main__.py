@@ -21,7 +21,7 @@ from .utils import (
     verifyLoggerGroup,
 )
 
-LOGS = logging.getLogger("CatUserbot")
+LOGS = logging.getLogger("AnantUserbot")
 
 LOGS.info(userbot.__copyright__)
 LOGS.info(f"Licensed under the terms of the {userbot.__license__}")

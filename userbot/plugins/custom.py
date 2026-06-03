@@ -17,7 +17,7 @@ extractor = URLExtract()
     pattern=r"custom (pmpermit|pmpic|pmblock|startmsg)$",
     command=("custom", plugin_category),
     info={
-        "header": "To customize your CatUserbot.",
+        "header": "To customize your AnantUserbot.",
         "options": {
             "pmpermit": "To customize pmpermit text. ",
             "pmblock": "To customize pmpermit block message.",
@@ -47,7 +47,7 @@ extractor = URLExtract()
     },
 )
 async def custom(event):
-    "To customize your CatUserbot."
+    "To customize your AnantUserbot."
     reply = await event.get_reply_message()
     text = None
     if reply:
@@ -81,7 +81,7 @@ async def custom(event):
     pattern=r"delcustom (pmpermit|pmpic|pmblock|startmsg)$",
     command=("delcustom", plugin_category),
     info={
-        "header": "To delete costomization of your CatUserbot.",
+        "header": "To delete costomization of your AnantUserbot.",
         "options": {
             "pmpermit": "To delete custom pmpermit text",
             "pmblock": "To delete custom pmpermit block message",
@@ -95,7 +95,7 @@ async def custom(event):
     },
 )
 async def del_custom(event):
-    "To delete costomization of your CatUserbot."
+    "To delete costomization of your AnantUserbot."
     input_str = event.pattern_match.group(1)
     if input_str == "pmpermit":
         if gvarstatus("PM_TEXT") is None:

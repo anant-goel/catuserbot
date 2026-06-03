@@ -48,7 +48,7 @@ REGEX_ = REGEX()
 sudo_enabledcmds = sudo_enabled_cmds()
 
 
-class CatUserBotClient(TelegramClient):
+class AnantUserBotClient(TelegramClient):
     def cat_cmd(
         self: TelegramClient,
         pattern: str or tuple = None,
@@ -163,7 +163,7 @@ class CatUserBotClient(TelegramClient):
                         ftext += result
                         pastelink = await paste_message(ftext, pastetype="s", markdown=False)
                         link = "[here](https://t.me/catuserbot_support)"
-                        text = "**CatUserbot Error report**\n\n" + "If you wanna you can report it"
+                        text = "**AnantUserbot Error report**\n\n" + "If you wanna you can report it"
                         text += f"- just forward this message {link}.\n"
                         text += "Nothing is logged except the fact of error and date\n\n"
                         text += f"**Error report : ** [{new['error']}]({pastelink})"
@@ -288,7 +288,7 @@ class CatUserBotClient(TelegramClient):
                         ftext += result
                         pastelink = await paste_message(ftext, pastetype="s", markdown=False)
                         link = "[here](https://t.me/catuserbot_support)"
-                        text = "**CatUserbot Error report**\n\n" + "If you wanna you can report it"
+                        text = "**AnantUserbot Error report**\n\n" + "If you wanna you can report it"
                         text += f"- just forward this message {link}.\n"
                         text += "Nothing is logged except the fact of error and date\n\n"
                         text += f"**Error report : ** [{new['error']}]({pastelink})"
@@ -319,14 +319,14 @@ class CatUserBotClient(TelegramClient):
         self.running_processes.clear()
 
 
-CatUserBotClient.fast_download_file = download_file
-CatUserBotClient.fast_upload_file = upload_file
-CatUserBotClient.reload = restart_script
-CatUserBotClient.get_msg_link = get_message_link
-CatUserBotClient.check_testcases = checking
+AnantUserBotClient.fast_download_file = download_file
+AnantUserBotClient.fast_upload_file = upload_file
+AnantUserBotClient.reload = restart_script
+AnantUserBotClient.get_msg_link = get_message_link
+AnantUserBotClient.check_testcases = checking
 try:
     send_message_check = TelegramClient.send_message
 except AttributeError:
-    CatUserBotClient.send_message = send_message
-    CatUserBotClient.send_file = send_file
-    CatUserBotClient.edit_message = edit_message
+    AnantUserBotClient.send_message = send_message
+    AnantUserBotClient.send_file = send_file
+    AnantUserBotClient.edit_message = edit_message

@@ -241,7 +241,7 @@ async def write_page(event):  # sourcery skip: low-code-quality
             return await edit_delete(event, "**ಠ∀ಠ Gimmi text to write**")
         cap = None
     if cmd == "notebook":
-        text = ((await catub(GetFullUserRequest(catub.uid))).full_user).about or "This is just a Sample text\n              -by Catuserbot"
+        text = ((await catub(GetFullUserRequest(catub.uid))).full_user).about or "This is just a Sample text\n              -by Anantuserbot"
         cap = f"**NoteBook Configs :-**\n\n**Font:** `{font}`\n**Page:** `{list(Pages.keys())[list(Pages.values()).index(page)]}`\n**Color:** `{foreground.title()}`\n**Log:**  `{log}`"
     reply_to_id = await reply_id(event)
     text = deEmojify(text)

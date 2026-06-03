@@ -34,7 +34,7 @@ async def chat_blacklist(event):
         if gvarstatus("blacklist_chats") is not None:
             return await edit_delete(event, "__Already it was turned on.__")
         addgvar("blacklist_chats", "true")
-        text = "__From now on, your CatUserbot doesn't work in the chats stored in database.__"
+        text = "__From now on, your AnantUserbot doesn't work in the chats stored in database.__"
         if len(blkchats) != 0:
             text += "**Bot is reloading to apply the changes. Please wait for a minute**"
             msg = await edit_or_reply(
@@ -49,7 +49,7 @@ async def chat_blacklist(event):
         )
     if gvarstatus("blacklist_chats") is not None:
         delgvar("blacklist_chats")
-        text = "__Your CatUserbot is as free as a bird.It works in Every Chat .__"
+        text = "__Your AnantUserbot is as free as a bird.It works in Every Chat .__"
         if len(blkchats) != 0:
             text += "**Bot is reloading to apply the changes. Please wait for a minute**"
             msg = await edit_or_reply(

@@ -84,7 +84,7 @@ async def covidindia(state):
 async def post_to_telegraph(
     page_title,
     html_format_content,
-    auth_name="CatUserbot",
+    auth_name="AnantUserbot",
     auth_url="https://t.me/catuserbot17",
 ):
     post_client = TelegraphPoster(use_api=True)
