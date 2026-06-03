@@ -103,6 +103,8 @@ async def init_all():
 def run_flask():
     """Run Flask server"""
     try:
+        # Quiet werkzeug's "development server" warning and per-request log spam.
+        logging.getLogger("werkzeug").setLevel(logging.ERROR)
         port = int(os.environ.get("PORT", "10000"))
         LOGS.info(f"Starting Flask server on port {port}")
         app.run(host="0.0.0.0", port=port, debug=False, use_reloader=False)

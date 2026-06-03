@@ -2,6 +2,7 @@
 
 import asyncio
 import base64
+import io
 import os
 import random
 import re
@@ -235,16 +236,32 @@ async def animeprofilepic(collection_images):
     pc = requests.get(f"http://getwallpapers.com/collection/{pack}").text
     f = re.compile(r"/\w+/full.+.jpg")
     f = f.findall(pc)
-    fy = f"http://getwallpapers.com{random.choice(f)}"
+    fy_list = list(f)
     if not os.path.exists("f.ttf"):
         urllib.request.urlretrieve(
             "https://github.com/rebel6969/mym/raw/master/Rebel-robot-Regular.ttf",
             "f.ttf",
         )
-    img = requests.get(fy)
-    with open("donottouch.jpg", "wb") as outfile:
-        outfile.write(img.content)
-    return "donottouch.jpg"
+    # The source site often returns HTML/redirects instead of a real JPEG, which
+    # Telegram rejects with StickerMimeInvalidError. Try a few candidates and only
+    # accept one that PIL confirms is a genuine image, normalised to a clean RGB JPEG.
+    random.shuffle(fy_list)
+    headers = {"User-Agent": "Mozilla/5.0"}
+    for path in fy_list[:5]:
+        fy = f"http://getwallpapers.com{path}"
+        try:
+            resp = requests.get(fy, headers=headers, timeout=30)
+            if resp.status_code != 200 or not resp.content:
+                continue
+            Image.open(io.BytesIO(resp.content)).verify()
+            Image.open(io.BytesIO(resp.content)).convert("RGB").save(
+                "donottouch.jpg", "JPEG", quality=90
+            )
+            return "donottouch.jpg"
+        except Exception as exc:  # noqa: BLE001
+            LOGS.warning(f"autopfp: skipping invalid image {fy}: {exc}")
+            continue
+    return None
 
 
 async def autopfp_start():
@@ -256,13 +273,26 @@ async def autopfp_start():
         AUTOPFP_START = False
     i = 0
     while AUTOPFP_START:
-        await animeprofilepic(string_list)
-        file = await catub.upload_file("donottouch.jpg")
-        if i > 0:
-            await catub(functions.photos.DeletePhotosRequest(await catub.get_profile_photos("me", limit=1)))
-        i += 1
-        await catub(functions.photos.UploadProfilePhotoRequest(file))
-        await _catutils.runcmd("rm -rf donottouch.jpg")
+        try:
+            result = await animeprofilepic(string_list)
+            if result and os.path.exists("donottouch.jpg"):
+                file = await catub.upload_file("donottouch.jpg")
+                if i > 0:
+                    await catub(
+                        functions.photos.DeletePhotosRequest(
+                            await catub.get_profile_photos("me", limit=1)
+                        )
+                    )
+                i += 1
+                await catub(functions.photos.UploadProfilePhotoRequest(file))
+                await _catutils.runcmd("rm -rf donottouch.jpg")
+            else:
+                LOGS.warning("autopfp: no valid image this round, will retry next cycle.")
+        except FloodWaitError as ex:
+            LOGS.warning(f"autopfp flood wait: {ex}")
+            await asyncio.sleep(ex.seconds)
+        except Exception as exc:  # noqa: BLE001
+            LOGS.warning(f"autopfp: skipping this cycle due to error: {exc}")
         await asyncio.sleep(CHANGE_TIME)
         AUTOPFP_START = gvarstatus("autopfp_strings") is not None
 
